@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hey Marley - Speaking Assessment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="mobile-frame">
+    
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <button class="nav-btn" id="nav-back" onclick="navigateBack()" disabled>
+        <span>‹</span>
+      </button>
+      <span class="nav-title" id="nav-title">Hey Marley</span>
+      <button class="nav-btn" id="nav-forward" onclick="navigateForward()" disabled>
+        <span>›</span>
+      </button>
+    </nav>
+    
+    <!-- ===== ONBOARDING SCREENS ===== -->
+    
+    <!-- Onboarding Screen 1: Basic Info -->
+    <div id="onboarding-1" class="screen active">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">👋</span>
+          <h1 class="onboarding-title">Welcome! Tell Marley about you.</h1>
+          <p class="onboarding-subtitle">Let's get to know each other</p>
+        </div>
+        
+        <div class="onboarding-form">
+          <!-- Photo Upload (Optional) -->
+          <div class="photo-upload-container">
+            <div id="onboarding-photo-preview" class="profile-photo-placeholder">
+              <span class="placeholder-icon">📷</span>
+            </div>
+            <input type="file" id="photo-input" accept="image/*" style="display:none;" />
+            <button type="button" class="btn-upload-photo" onclick="document.getElementById('photo-input').click()">Upload Photo</button>
+            <span class="photo-hint">Optional</span>
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="ob-fullname" class="form-input" placeholder="Enter your name" oninput="validateOnboarding1()">
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">Age</label>
+            <select id="ob-age" class="form-select" onchange="validateOnboarding1()">
+              <option value="">Select your age</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+            </select>
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">City</label>
+            <input type="text" id="ob-city" class="form-input" placeholder="Enter your city" oninput="validateOnboarding1()">
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">Country</label>
+            <select id="ob-country" class="form-select" onchange="validateOnboarding1()">
+              <option value="">Select your country</option>
+              <option value="India">India</option>
+              <option value="USA">USA</option>
+              <option value="UK">UK</option>
+              <option value="UAE">UAE</option>
+              <option value="Singapore">Singapore</option>
+              <option value="Australia">Australia</option>
+              <option value="Canada">Canada</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn primary dark" id="ob1-next" disabled onclick="goToOnboarding(2)">Next →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Onboarding Screen 2: School Life -->
+    <div id="onboarding-2" class="screen">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">🎓</span>
+          <h1 class="onboarding-title">Your School Life</h1>
+          <p class="onboarding-subtitle">Tell us about your education</p>
+        </div>
+        
+        <div class="onboarding-form">
+          <div class="form-card">
+            <label class="form-label">School Type</label>
+            <div class="chip-group" id="school-type-chips">
+              <button type="button" class="chip" data-value="CBSE" onclick="selectChip(this, 'school_type')">CBSE</button>
+              <button type="button" class="chip" data-value="ICSE" onclick="selectChip(this, 'school_type')">ICSE</button>
+              <button type="button" class="chip" data-value="IB" onclick="selectChip(this, 'school_type')">IB</button>
+              <button type="button" class="chip" data-value="Cambridge" onclick="selectChip(this, 'school_type')">Cambridge</button>
+              <button type="button" class="chip" data-value="Other" onclick="selectChip(this, 'school_type')">Other</button>
+            </div>
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">Grade</label>
+            <div class="chip-group" id="grade-chips">
+              <button type="button" class="chip" data-value="8" onclick="selectChip(this, 'grade')">8</button>
+              <button type="button" class="chip" data-value="9" onclick="selectChip(this, 'grade')">9</button>
+              <button type="button" class="chip" data-value="10" onclick="selectChip(this, 'grade')">10</button>
+              <button type="button" class="chip" data-value="11" onclick="selectChip(this, 'grade')">11</button>
+              <button type="button" class="chip" data-value="12" onclick="selectChip(this, 'grade')">12</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn secondary" onclick="goToOnboarding(1)">← Back</button>
+          <button class="btn primary dark" id="ob2-next" disabled onclick="goToOnboarding(3)">Next →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Onboarding Screen 3: Interests -->
+    <div id="onboarding-3" class="screen">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">⭐</span>
+          <h1 class="onboarding-title">What are you interested in?</h1>
+          <p class="onboarding-subtitle">Select 3–5 interests</p>
+          <span class="selection-counter" id="interests-counter">0 of 5 selected</span>
+        </div>
+        
+        <div class="onboarding-form">
+          <div class="form-card">
+            <label class="form-label">Academic Interests</label>
+            <div class="chip-group multi" id="academic-interests-chips">
+              <button type="button" class="chip" data-value="International Relations" onclick="toggleMultiChip(this, 'interests')">International Relations</button>
+              <button type="button" class="chip" data-value="History & Politics" onclick="toggleMultiChip(this, 'interests')">History & Politics</button>
+              <button type="button" class="chip" data-value="Science / STEM" onclick="toggleMultiChip(this, 'interests')">Science / STEM</button>
+              <button type="button" class="chip" data-value="Climate" onclick="toggleMultiChip(this, 'interests')">Climate</button>
+              <button type="button" class="chip" data-value="Economics" onclick="toggleMultiChip(this, 'interests')">Economics</button>
+              <button type="button" class="chip" data-value="Psychology" onclick="toggleMultiChip(this, 'interests')">Psychology</button>
+            </div>
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">Personal Interests</label>
+            <div class="chip-group multi" id="personal-interests-chips">
+              <button type="button" class="chip" data-value="Sports" onclick="toggleMultiChip(this, 'interests')">Sports</button>
+              <button type="button" class="chip" data-value="Gaming" onclick="toggleMultiChip(this, 'interests')">Gaming</button>
+              <button type="button" class="chip" data-value="Music" onclick="toggleMultiChip(this, 'interests')">Music</button>
+              <button type="button" class="chip" data-value="Anime" onclick="toggleMultiChip(this, 'interests')">Anime</button>
+              <button type="button" class="chip" data-value="Fashion" onclick="toggleMultiChip(this, 'interests')">Fashion</button>
+              <button type="button" class="chip" data-value="Social Media" onclick="toggleMultiChip(this, 'interests')">Social Media</button>
+              <button type="button" class="chip" data-value="Debate Team" onclick="toggleMultiChip(this, 'interests')">Debate Team</button>
+              <button type="button" class="chip" data-value="Drama / Theatre" onclick="toggleMultiChip(this, 'interests')">Drama / Theatre</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn secondary" onclick="goToOnboarding(2)">← Back</button>
+          <button class="btn primary dark" id="ob3-next" disabled onclick="goToOnboarding(4)">Next →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Onboarding Screen 4: Communication Goals -->
+    <div id="onboarding-4" class="screen">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">🎤</span>
+          <h1 class="onboarding-title">What do you want to improve?</h1>
+          <p class="onboarding-subtitle">Select 2–3 goals</p>
+          <span class="selection-counter" id="goals-counter">0 of 3 selected</span>
+        </div>
+        
+        <div class="onboarding-form">
+          <div class="form-card">
+            <div class="chip-group multi" id="goals-chips">
+              <button type="button" class="chip" data-value="Speaking more confidently" onclick="toggleMultiChip(this, 'goals')">Speaking more confidently</button>
+              <button type="button" class="chip" data-value="Reducing fillers" onclick="toggleMultiChip(this, 'goals')">Reducing fillers</button>
+              <button type="button" class="chip" data-value="Improving clarity" onclick="toggleMultiChip(this, 'goals')">Improving clarity</button>
+              <button type="button" class="chip" data-value="Speaking longer without stopping" onclick="toggleMultiChip(this, 'goals')">Speaking longer without stopping</button>
+              <button type="button" class="chip" data-value="Giving better examples" onclick="toggleMultiChip(this, 'goals')">Giving better examples</button>
+              <button type="button" class="chip" data-value="Thinking fast" onclick="toggleMultiChip(this, 'goals')">Thinking fast</button>
+              <button type="button" class="chip" data-value="Being more structured" onclick="toggleMultiChip(this, 'goals')">Being more structured</button>
+              <button type="button" class="chip" data-value="Preparing for Model UN" onclick="toggleMultiChip(this, 'goals')">Preparing for Model UN</button>
+              <button type="button" class="chip" data-value="Preparing for interviews" onclick="toggleMultiChip(this, 'goals')">Preparing for interviews</button>
+              <button type="button" class="chip" data-value="Talking to new people" onclick="toggleMultiChip(this, 'goals')">Talking to new people</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn secondary" onclick="goToOnboarding(3)">← Back</button>
+          <button class="btn primary dark" id="ob4-next" disabled onclick="goToOnboarding(5)">Next →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Onboarding Screen 5: Emotional Needs -->
+    <div id="onboarding-5" class="screen">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">💭</span>
+          <h1 class="onboarding-title">What usually gets in the way?</h1>
+          <p class="onboarding-subtitle">This helps Marley understand how to guide you better.</p>
+        </div>
+        
+        <div class="onboarding-form">
+          <div class="form-card">
+            <div class="chip-group multi" id="emotional-chips">
+              <button type="button" class="chip" data-value="I forget what I want to say" onclick="toggleMultiChip(this, 'emotional_needs')">I forget what I want to say</button>
+              <button type="button" class="chip" data-value="I get nervous" onclick="toggleMultiChip(this, 'emotional_needs')">I get nervous</button>
+              <button type="button" class="chip" data-value="I speak too fast" onclick="toggleMultiChip(this, 'emotional_needs')">I speak too fast</button>
+              <button type="button" class="chip" data-value="I lose my train of thought" onclick="toggleMultiChip(this, 'emotional_needs')">I lose my train of thought</button>
+              <button type="button" class="chip" data-value="I feel judged" onclick="toggleMultiChip(this, 'emotional_needs')">I feel judged</button>
+              <button type="button" class="chip" data-value="I don't know the right words" onclick="toggleMultiChip(this, 'emotional_needs')">I don't know the right words</button>
+              <button type="button" class="chip" data-value="I don't sound confident" onclick="toggleMultiChip(this, 'emotional_needs')">I don't sound confident</button>
+              <button type="button" class="chip" data-value="I don't like my voice" onclick="toggleMultiChip(this, 'emotional_needs')">I don't like my voice</button>
+              <button type="button" class="chip" data-value="I fear making mistakes" onclick="toggleMultiChip(this, 'emotional_needs')">I fear making mistakes</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn secondary" onclick="goToOnboarding(4)">← Back</button>
+          <button class="btn primary dark" onclick="goToOnboarding(6)">Next →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Onboarding Screen 6: Short-Term Goal -->
+    <div id="onboarding-6" class="screen">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">🎯</span>
+          <h1 class="onboarding-title">What's your short-term goal?</h1>
+          <p class="onboarding-subtitle">Set a specific communication goal</p>
+        </div>
+        
+        <div class="onboarding-form">
+          <div class="form-card">
+            <label class="form-label">My goal is to…</label>
+            <textarea id="ob-goal-text" class="form-textarea" placeholder="e.g., Speak more clearly in class discussions, Reduce filler words, Build confidence for Model UN" maxlength="150" oninput="validateOnboarding6()"></textarea>
+            <span class="char-counter" id="goal-char-counter">0/150</span>
+          </div>
+          
+          <div class="form-card">
+            <label class="form-label">I want to achieve this by:</label>
+            <input type="date" id="ob-target-date" class="form-input" onchange="validateOnboarding6()">
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn secondary" onclick="goToOnboarding(5)">← Back</button>
+          <button class="btn primary dark" id="ob6-next" disabled onclick="goToOnboarding(7)">Next →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Onboarding Screen 7: Review -->
+    <div id="onboarding-7" class="screen">
+      <div class="screen-content scrollable onboarding-screen">
+        <div class="onboarding-header">
+          <span class="onboarding-emoji">🔎</span>
+          <h1 class="onboarding-title">Review Your Details</h1>
+          <p class="onboarding-subtitle">Make sure everything looks right</p>
+        </div>
+        
+        <div class="onboarding-form review-form">
+          <div class="review-card">
+            <h3 class="review-section-title">👤 About You</h3>
+            <div class="review-row">
+              <span class="review-label">Name:</span>
+              <span class="review-value" id="review-name">—</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Age:</span>
+              <span class="review-value" id="review-age">—</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Location:</span>
+              <span class="review-value" id="review-location">—</span>
+            </div>
+          </div>
+          
+          <div class="review-card">
+            <h3 class="review-section-title">🎓 School</h3>
+            <div class="review-row">
+              <span class="review-label">Type:</span>
+              <span class="review-value" id="review-school-type">—</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Grade:</span>
+              <span class="review-value" id="review-grade">—</span>
+            </div>
+          </div>
+          
+          <div class="review-card">
+            <h3 class="review-section-title">⭐ Interests</h3>
+            <div class="review-chips" id="review-interests">—</div>
+          </div>
+          
+          <div class="review-card">
+            <h3 class="review-section-title">🎤 Communication Goals</h3>
+            <div class="review-chips" id="review-goals">—</div>
+          </div>
+          
+          <div class="review-card">
+            <h3 class="review-section-title">💭 Challenges</h3>
+            <div class="review-chips" id="review-emotional">—</div>
+          </div>
+          
+          <div class="review-card">
+            <h3 class="review-section-title">🎯 Short-Term Goal</h3>
+            <p class="review-goal-text" id="review-goal-text">—</p>
+            <div class="review-row">
+              <span class="review-label">Target Date:</span>
+              <span class="review-value" id="review-target-date">—</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="onboarding-nav">
+          <button class="btn secondary" onclick="goToOnboarding(6)">← Back</button>
+          <button class="btn primary dark large" onclick="saveProfileAndBegin()">Save & Begin My Journey →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ===== END ONBOARDING SCREENS ===== -->
+    
+    <!-- Screen 1: Profile (Goodreads Clone) -->
+    <div id="home" class="screen">
+      <div class="profile-page">
+        
+        <!-- Profile Header -->
+        <section class="profile-hero">
+          <div class="profile-avatar-row">
+            <img src="avatar.png" alt="Arnav Kumar" class="profile-photo" />
+            <div class="profile-details">
+              <h1 class="profile-name">Arnav Kumar</h1>
+              <p class="profile-tagline">Mumbai, India 🇮🇳</p>
+              <a href="#" class="profile-link">View Network ›</a>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button class="btn-edit">Edit</button>
+          </div>
+        </section>
+
+        <!-- 2026 Communication Goal Card -->
+        <section class="goal-card">
+          <div class="goal-card-row">
+            <span class="goal-icon">🎯</span>
+            <span class="goal-label">2026 Communication Goal</span>
+            <button class="goal-menu">···</button>
+          </div>
+          <div class="goal-progress-track">
+            <div class="goal-progress-bar" style="width: 40%;"></div>
+          </div>
+          <p class="goal-status"><span class="goal-count">2 goals</span> of 5</p>
+        </section>
+
+        <!-- Peer Practice Insights Card -->
+        <section class="wrap-card">
+          <div class="wrap-text">
+            <h3 class="wrap-title">Peer Practice Insights</h3>
+            <p class="wrap-subtitle">See how peers like you practiced this week!</p>
+            <a href="#" class="wrap-link">Check Out →</a>
+          </div>
+          <div class="wrap-art">
+            <img src="wrap-artwork.png" alt="Peer Practice Insights" />
+          </div>
+        </section>
+
+        <!-- Tab Navigation -->
+        <nav class="profile-tabs">
+          <button class="tab-btn active" data-tab="about">About</button>
+          <button class="tab-btn" data-tab="goals">Goals</button>
+          <button class="tab-btn" data-tab="clubs">Clubs</button>
+          <button class="tab-btn" data-tab="feedback">Feedback</button>
+          <button class="tab-btn" data-tab="likes">Likes</button>
+        </nav>
+
+        <!-- Tab Panels -->
+        <div class="tab-panels">
+          
+          <!-- About Panel -->
+          <div class="tab-panel active" id="panel-about">
+            <h4 class="panel-heading">About Arnav</h4>
+            
+            <div class="info-row">
+              <span class="info-icon">🏫</span>
+              <div class="info-text">
+                <span class="info-label">School</span>
+                <span class="info-value">Cathedral & John Connon School</span>
+              </div>
+            </div>
+            
+            <div class="info-row">
+              <span class="info-icon">❤️</span>
+              <div class="info-text">
+                <span class="info-label">Interests</span>
+                <span class="info-value">Debate, Street Food, Science, Psychology</span>
+              </div>
+            </div>
+            
+            <div class="info-row">
+              <span class="info-icon">⭐</span>
+              <div class="info-text">
+                <span class="info-label">Self-Rating (Communication)</span>
+                <span class="info-value">3.5 / 5</span>
+              </div>
+            </div>
+            
+            <div class="info-row">
+              <span class="info-icon">🧳</span>
+              <div class="info-text">
+                <span class="info-label">Recently Visited</span>
+                <span class="info-value">Singapore 🇸🇬, Dubai 🇦🇪, Pune 🇮🇳</span>
+              </div>
+            </div>
+            
+            <div class="info-row last">
+              <span class="info-icon">🎨</span>
+              <div class="info-text">
+                <span class="info-label">Favourite Hobbies</span>
+                <span class="info-value">Reading essays, Café-hopping, Coding, Music</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Goals Panel -->
+          <div class="tab-panel" id="panel-goals">
+            <h4 class="panel-heading">Communication Goals</h4>
+            <div class="info-row">
+              <span class="info-icon">📌</span>
+              <div class="info-text">
+                <span class="info-value">Improve structured arguments</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">📌</span>
+              <div class="info-text">
+                <span class="info-value">Expand vocabulary range</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">📌</span>
+              <div class="info-text">
+                <span class="info-value">Speak for 2 minutes without pausing</span>
+              </div>
+            </div>
+            <div class="info-row last">
+              <span class="info-icon">📌</span>
+              <div class="info-text">
+                <span class="info-value">Practice 5 Deep Dives a week</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clubs Panel -->
+          <div class="tab-panel" id="panel-clubs">
+            <h4 class="panel-heading">My Clubs</h4>
+            <div class="info-row">
+              <span class="info-icon">🏛️</span>
+              <div class="info-text">
+                <span class="info-value">Debate Society</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">🌍</span>
+              <div class="info-text">
+                <span class="info-value">Global Speakers Club</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">✍️</span>
+              <div class="info-text">
+                <span class="info-value">Writing Circle</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">💡</span>
+              <div class="info-text">
+                <span class="info-value">Creativity Lab</span>
+              </div>
+            </div>
+            <div class="info-row last faded">
+              <span class="info-icon">🎙️</span>
+              <div class="info-text">
+                <span class="info-value">Marley Practice Pods</span>
+                <span class="info-badge">Coming soon</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feedback Panel -->
+          <div class="tab-panel" id="panel-feedback">
+            <h4 class="panel-heading">Peer Feedback</h4>
+            <div class="feedback-card">
+              <span class="feedback-author">🇯🇵 Aiko (Japan)</span>
+              <p class="feedback-quote">"Great argument structure! Try adding more examples."</p>
+            </div>
+            <div class="feedback-card">
+              <span class="feedback-author">🇬🇧 Leo (UK)</span>
+              <p class="feedback-quote">"Loved your perspective on climate policy!"</p>
+            </div>
+            <div class="feedback-card">
+              <span class="feedback-author">🇮🇳 Riya (India)</span>
+              <p class="feedback-quote">"Your vocabulary is impressive. Keep practicing!"</p>
+            </div>
+          </div>
+
+          <!-- Likes Panel -->
+          <div class="tab-panel" id="panel-likes">
+            <h4 class="panel-heading">Liked Content</h4>
+            <p class="empty-message">Prompts, lessons, and peer responses you liked will appear here.</p>
+          </div>
+
+        </div>
+
+        <!-- Get Started Button -->
+        <div class="profile-cta">
+          <button class="btn-get-started" onclick="startPersonalizedSession()">Get Started →</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Screen 2: Rapid Fire Challenge -->
+    <div id="rapid-fire" class="screen">
+      <div class="screen-content">
+        <div class="challenge-header">
+          <span class="badge">Challenge 1 of 3</span>
+          <h2>30-Second Rapid Fire Challenge</h2>
+          <p class="instruction">Complete the sentences in 30 seconds.</p>
+        </div>
+        
+        <div class="timer-display">
+          <div class="timer-ring">
+            <span id="rapid-fire-timer">30</span>
+          </div>
+        </div>
+        
+        <div class="prompt-card">
+          <p class="prompt-text" id="rapid-fire-prompt">"Autos are such a big part of my city because…"</p>
+        </div>
+        
+        <div class="waveform" id="rapid-fire-waveform">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+        
+        <button class="mic-btn" id="rapid-fire-mic" onclick="startRapidFire()">
+          <span class="mic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="22"></line><line x1="8" y1="22" x2="16" y2="22"></line></svg></span>
+          <span class="mic-label">Tap to Start</span>
+        </button>
+      </div>
+    </div>
+
+<!-- Screen 3: Rapid Fire Completion -->
+<div id="rapid-fire-complete" class="screen">
+  <div class="screen-content centered scrollable-completion">
+    <div class="completion-icon">🔥</div>
+    <h1>Great job!</h1>
+    <p class="subtitle">You completed the Rapid Fire round.</p>
+    
+    <!-- Marley's feedback will be injected here by JavaScript -->
+    <div id="marley-feedback" class="feedback-container" style="display: none;">
+      <div class="marley-says">
+        <p class="feedback-label">Marley says:</p>
+        <p class="feedback-text"></p>
+      </div>
+    </div>
+    
+    <div class="completion-buttons">
+      <button class="btn secondary" onclick="retryRapidFire()">🔄 Retry Rapid Fire</button>
+      <button class="btn primary dark" onclick="startPersonalizedWordBomb()">Continue to Word Connector →</button>
+    </div>
+  </div>
+</div>
+
+    <!-- Screen 4: Word Connector Challenge -->
+    <div id="word-bomb" class="screen">
+      <div class="screen-content">
+        <div class="challenge-header">
+          <span class="badge">Challenge 2 of 3</span>
+          <h2>Word Connector Challenge</h2>
+          <p class="instruction">Talk for 1 minute by connecting all the words into a cohesive story.</p>
+        </div>
+        
+        <div class="timer-display">
+          <div class="timer-ring">
+            <span id="word-bomb-timer">60</span>
+          </div>
+        </div>
+        
+        <div class="word-bomb-display">
+          <div class="word-card">
+            <span id="current-word">DIWALI</span>
+          </div>
+        </div>
+        
+        <div class="waveform" id="word-bomb-waveform">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+        
+        <button class="mic-btn" id="word-bomb-mic" onclick="startWordBomb()">
+          <span class="mic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="22"></line><line x1="8" y1="22" x2="16" y2="22"></line></svg></span>
+          <span class="mic-label">Tap to Start</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 5: Word Connector Completion -->
+    <div id="word-bomb-complete" class="screen">
+      <div class="screen-content centered scrollable-completion">
+        <div class="completion-icon">💎</div>
+        <h1>You're on a roll!</h1>
+        <p class="subtitle">You completed the Word Connector round.</p>
+        
+        <!-- Marley's feedback for Word Connector -->
+        <div id="word-bomb-marley-feedback" class="feedback-container" style="display: none;">
+          <div class="marley-says">
+            <p class="feedback-label">Marley says:</p>
+            <p class="feedback-text"></p>
+          </div>
+        </div>
+        
+        <div class="completion-buttons">
+          <button class="btn secondary" onclick="retryWordBomb()">🔄 Retry Word Connector</button>
+          <button class="btn primary dark" onclick="startPersonalizedDeepDive()">Continue to Deep Dive →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 6: Deep Dive Challenge -->
+    <div id="deep-dive" class="screen">
+      <div class="screen-content chat-screen">
+        <div class="challenge-header compact">
+          <span class="badge">Challenge 3 of 3</span>
+          <h2>Deep Dive Challenge</h2>
+          <p class="instruction">A guided conversation on a complex topic.</p>
+        </div>
+        
+        <div class="chat-area" id="chat-area">
+          <!-- Chat bubbles will be added here dynamically -->
+        </div>
+        
+        <div class="chat-input-area">
+          <div class="waveform small" id="deep-dive-waveform">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+          <button class="mic-btn small" id="deep-dive-mic" onclick="recordDeepDiveResponse()" disabled>
+            <span class="mic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="22"></line><line x1="8" y1="22" x2="16" y2="22"></line></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 6b: Deep Dive Completion -->
+    <div id="deep-dive-complete" class="screen">
+      <div class="screen-content centered scrollable-completion">
+        <div class="completion-icon">🧠</div>
+        <h1>Deep thinking!</h1>
+        <p class="subtitle">You completed the Deep Dive conversation.</p>
+        
+        <!-- Marley's feedback for Deep Dive -->
+        <div id="deep-dive-marley-feedback" class="feedback-container" style="display: none;">
+          <div class="marley-says">
+            <p class="feedback-label">Marley says:</p>
+            <p class="feedback-text"></p>
+          </div>
+        </div>
+        
+        <div class="completion-buttons">
+          <button class="btn secondary" onclick="retryDeepDive()">🔄 Retry Deep Dive</button>
+          <button class="btn primary dark" onclick="finishAndShowResults()">View My Results →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 7: Skill Profile -->
+    <div id="analysis" class="screen">
+      <div class="screen-content scrollable achievement-screen">
+        
+        <!-- Header -->
+        <div class="achievement-header">
+          <h2 class="achievement-title">🎯 Your Skill Profile</h2>
+          <p class="achievement-subtitle">Here's how you communicate today</p>
+        </div>
+
+        <!-- Skill Cards (3 skills only) -->
+        <div class="achievement-cards">
+          
+          <!-- Clarity & Fluency -->
+          <div class="achievement-card" id="clarity-card">
+            <div class="achievement-top">
+              <div class="badge-icon clarity">💬</div>
+              <div class="achievement-info">
+                <span class="achievement-level" id="clarity-level">Building</span>
+                <h3 class="achievement-name">Clarity & Fluency</h3>
+              </div>
+            </div>
+            <div class="achievement-progress">
+              <div class="achievement-bar clarity" id="clarity-bar" style="width: 40%"></div>
+            </div>
+            <div class="achievement-details">
+              <p class="detail-text" id="clarity-description">
+                Complete all challenges to see your Clarity & Fluency feedback.
+              </p>
+            </div>
+            <div class="achievement-stars" id="clarity-stars">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+
+          <!-- Structure & Reasoning -->
+          <div class="achievement-card" id="structure-card">
+            <div class="achievement-top">
+              <div class="badge-icon structure">🧠</div>
+              <div class="achievement-info">
+                <span class="achievement-level" id="structure-level">Building</span>
+                <h3 class="achievement-name">Structure & Reasoning</h3>
+              </div>
+            </div>
+            <div class="achievement-progress">
+              <div class="achievement-bar structure" id="structure-bar" style="width: 40%"></div>
+            </div>
+            <div class="achievement-details">
+              <p class="detail-text" id="structure-description">
+                Complete all challenges to see your Structure & Reasoning feedback.
+              </p>
+            </div>
+            <div class="achievement-stars" id="structure-stars">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+
+          <!-- Vocabulary & Language Use -->
+          <div class="achievement-card" id="vocabulary-card">
+            <div class="achievement-top">
+              <div class="badge-icon vocabulary">📚</div>
+              <div class="achievement-info">
+                <span class="achievement-level" id="vocabulary-level">Building</span>
+                <h3 class="achievement-name">Vocabulary & Language</h3>
+              </div>
+            </div>
+            <div class="achievement-progress">
+              <div class="achievement-bar vocabulary" id="vocabulary-bar" style="width: 40%"></div>
+            </div>
+            <div class="achievement-details">
+              <p class="detail-text" id="vocabulary-description">
+                Complete all challenges to see your Vocabulary & Language feedback.
+              </p>
+            </div>
+            <div class="achievement-stars" id="vocabulary-stars">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Overall Summary from Marley -->
+        <div class="next-badges-section">
+          <h3 class="section-title">💭 Marley's Summary</h3>
+          <p class="detail-text" id="overall-summary">
+            After you complete all three speaking challenges, Marley will share a warm summary of your strengths here.
+          </p>
+        </div>
+
+        <!-- Next Focus -->
+        <div class="next-badges-section">
+          <h3 class="section-title">🎯 Your Next Focus</h3>
+          <p class="detail-text" id="next-focus">
+            Complete all challenges to get your personalized improvement focus.
+          </p>
+        </div>
+
+        <!-- Next Badges Section -->
+        <div class="next-badges-section">
+          <h3 class="section-title">🔓 Next Badges to Unlock</h3>
+          <div class="upcoming-badges">
+            <div class="upcoming-badge">
+              <div class="badge-preview">🎯</div>
+              <span class="badge-name">Clear Communicator</span>
+            </div>
+            <div class="upcoming-badge">
+              <div class="badge-preview">🧠</div>
+              <span class="badge-name">Deep Thinker</span>
+            </div>
+            <div class="upcoming-badge">
+              <div class="badge-preview">📚</div>
+              <span class="badge-name">Word Master</span>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn primary dark" onclick="loadAndShowActionPlan()">View My Action Plan →</button>
+      </div>
+    </div>
+
+    <!-- Screen 8: Action Plan (Quest/Mission Design) -->
+    <div id="action-plan" class="screen">
+      <div class="screen-content scrollable achievement-screen">
+        
+        <!-- Quest Header -->
+        <div class="quest-header">
+          <div class="quest-badge">
+            <span class="quest-icon">⚔️</span>
+          </div>
+          <h1 class="quest-title">Your 3-Week Quest</h1>
+          <p class="quest-subtitle">Complete missions to level up your speaking skills</p>
+        </div>
+
+        <!-- Goal Info -->
+        <div class="quest-goal-card">
+          <div class="goal-row">
+            <span class="goal-emoji">🎯</span>
+            <div class="goal-detail">
+              <span class="goal-label">Target</span>
+              <span class="goal-value" id="action-plan-target">Loading your goal...</span>
+            </div>
+          </div>
+          <div class="goal-row">
+            <span class="goal-emoji">📅</span>
+            <div class="goal-detail">
+              <span class="goal-label">Event Date</span>
+              <span class="goal-value" id="action-plan-date">Loading...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission Cards -->
+        <div class="mission-cards" id="mission-cards">
+          
+          <!-- Mission 1: Week 1 -->
+          <div class="mission-card active" id="week1-card">
+            <div class="mission-header">
+              <div class="mission-badge foundation">🛡️</div>
+              <div class="mission-info">
+                <span class="mission-level">WEEK 1</span>
+                <h3 class="mission-name" id="week1-focus">Loading your personalized plan...</h3>
+              </div>
+            </div>
+            <div class="mission-progress">
+              <div class="mission-bar" style="width: 0%"></div>
+            </div>
+            <span class="mission-status">0/5 tasks completed</span>
+            
+            <ul class="mission-tasks" id="week1-missions">
+              <li><span class="task-icon">⏳</span> Loading missions...</li>
+            </ul>
+            
+            <div class="mission-reward">
+              <span class="reward-icon">🏅</span>
+              <span class="reward-text">Level Up Reward: Earn the <strong>Foundation Hero</strong> Badge</span>
+            </div>
+          </div>
+
+          <!-- Mission 2: Week 2 -->
+          <div class="mission-card locked" id="week2-card">
+            <div class="mission-header">
+              <div class="mission-badge structure">🧩</div>
+              <div class="mission-info">
+                <span class="mission-level">WEEK 2</span>
+                <h3 class="mission-name" id="week2-focus">Coming soon...</h3>
+              </div>
+              <span class="lock-icon">🔒</span>
+            </div>
+            <div class="mission-progress">
+              <div class="mission-bar" style="width: 0%"></div>
+            </div>
+            <span class="mission-status">0/5 tasks completed</span>
+            
+            <ul class="mission-tasks" id="week2-missions">
+              <li><span class="task-icon">⏳</span> Loading missions...</li>
+            </ul>
+            
+            <div class="mission-reward">
+              <span class="reward-icon">🏅</span>
+              <span class="reward-text">Level Up Reward: Earn the <strong>Structure Ace</strong> Badge</span>
+            </div>
+          </div>
+
+          <!-- Mission 3: Week 3 -->
+          <div class="mission-card locked" id="week3-card">
+            <div class="mission-header">
+              <div class="mission-badge mastery">👑</div>
+              <div class="mission-info">
+                <span class="mission-level">WEEK 3</span>
+                <h3 class="mission-name" id="week3-focus">Coming soon...</h3>
+              </div>
+              <span class="lock-icon">🔒</span>
+            </div>
+            <div class="mission-progress">
+              <div class="mission-bar" style="width: 0%"></div>
+            </div>
+            <span class="mission-status">0/5 tasks completed</span>
+            
+            <ul class="mission-tasks" id="week3-missions">
+              <li><span class="task-icon">⏳</span> Loading missions...</li>
+            </ul>
+            
+            <div class="mission-reward">
+              <span class="reward-icon">🏅</span>
+              <span class="reward-text">Level Up Reward: Earn the <strong>Delivery Master</strong> Badge</span>
+            </div>
+          </div>
+
+        </div>
+        
+        <button class="btn primary dark" onclick="showScreen('rapid-fire')">Begin Week 1 Mission →</button>
+      </div>
+    </div>
+
+    <!-- Screen 9: Global Peer Learning -->
+    <div id="global-peer-screen" class="screen">
+      <div class="screen-content scrollable">
+        <div class="global-peer-header">
+          <h1>Learn With Global Peers</h1>
+          <p class="subtitle">See how other teens around the world respond to the same challenge — and learn new perspectives.</p>
+        </div>
+
+        <div class="global-peer-list">
+          <!-- Bubble 1 - Lavender -->
+          <div class="peer-bubble lavender">
+            <span class="name">🇯🇵 Aiko (Japan)</span>
+            "I think climate change matters because our summers are getting hotter every year…"
+          </div>
+
+          <!-- Bubble 2 - Blue -->
+          <div class="peer-bubble blue">
+            <span class="name">🇬🇧 Leo (UK)</span>
+            "I'd argue that small policy changes can create big national impact…"
+          </div>
+
+          <!-- Bubble 3 - Peach -->
+          <div class="peer-bubble peach">
+            <span class="name">🇮🇳 Riya (India)</span>
+            "I learned about water scarcity by visiting my village last year…"
+          </div>
+        </div>
+
+        <button class="btn primary dark" onclick="restartAssessment()">Explore Global Responses →</button>
+        <button class="secondary-button">Find a Practice Partner →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
