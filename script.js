@@ -536,7 +536,7 @@ function coachSpeak(text, onDone) {
 }
 
 // ===== Rapid Fire Challenge =====
-const API_BASE_URL = 'http://127.0.0.1:8000';  // Change to your deployed URL in production
+const API_BASE_URL = 'hey-marley-backend-production.up.railway.app';  // Change to your deployed URL in production
 
 // Global session results for the full assessment
 window.HM_RESULTS = {
